@@ -1,0 +1,19 @@
+{
+  "name": "provable",
+  "version": "1.0.0",
+  "description": "Provable random generator and utilities using the algorithm outlined here: https://bitcointalk.org/index.php?topic=922898.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daywiss/provable.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daywiss/provable/issues"
+  },
+  "homepage": "https://github.com/daywiss/provable#readme"
+}
