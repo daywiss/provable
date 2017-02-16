@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/daywiss/provable/issues"
   },
-  "homepage": "https://github.com/daywiss/provable#readme"
+  "homepage": "https://github.com/daywiss/provable#readme",
+  "devDependencies": {
+    "tape": "^4.6.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "random-js": "^1.0.8"
+  }
 }
