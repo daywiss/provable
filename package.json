@@ -1,10 +1,11 @@
 {
   "name": "provable",
-  "version": "1.0.0",
-  "description": "Provable random generator and utilities using the algorithm outlined here: https://bitcointalk.org/index.php?topic=922898.0",
+  "version": "0.1.0",
+  "description": "A Provably random engine which can be plugged into [random-js](https://www.npmjs.com/package/random-js)."
+  "keywords": ["random","bitcoin","provable","random generator","random engine","random-js","gambling","provably random","bustabit"],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test"
   },
   "repository": {
     "type": "git",
