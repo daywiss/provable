@@ -11,7 +11,7 @@ The idea behind provably random is that a deteministic series of related but ran
 any random outcomes are calculated. Once generated, each hash in the series is used to create a random outcome.
 The provable part comes in when a client wants to verify the integrity of the outcome. After every outcome
 is produced the hash which produced it can also be made public. If one has access to the current hash and
-the previous hash (from the previous outcome), then a SHA256 can be used on the previous hash to generate the next.
+the previous hash (from the previous outcome), then a SHA256 can be used on the current hash to generate the previous.
 This should hold true for all hashes in the series as they are exposed. You cannot predict the next hash, but you
 can verify the previous hash by looking in the past. Any deviation from this verification would mean that the hashes
 were manipulated and not part of the pregenerated series. 
