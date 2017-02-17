@@ -44,7 +44,7 @@ or generate a new series and continue.
 
   //raw sha256 hash. Increments your hash index. Throws an error if no hashes left.
   //if you want to do your own random calculations then use this. 
-  var hash = engine.nextHash()
+  var hash = engine.next()
 
   //internal state of the engine. Use this to save and resume your engine.
   var state = engine.state()
@@ -63,10 +63,10 @@ the hash when generating the random integer.
 
 ```js
   var Random = require('random-js')
-  var Engine = require('provable')
+  var Provable = require('provable')
 
   //use random like a random-js object
-  var random = Random(Engine({ count:10000 })
+  var random = Random(Provable({ count:10000 })
 
   //some examples
   random.bool()
@@ -122,7 +122,7 @@ Create a hash series and start the stateful engine.
     index: // integer representing which hash in the series will be used next
     count: //the number of hashes in this series
     seed: //a string to seed nodes crypto engine to start generating the first hash (last hash of series). Withold to seed with random hash.
-    clientSeed: //an additional seed value supplied, will update the hash before being returned from nextHash()
+    clientSeed: //an additional seed value supplied, will update the hash before being returned from next()
     onChange: //a function callback which returns the state of the engine after every change. Optionally poll state instead with engine.state()
   }
 
