@@ -45,7 +45,7 @@ test('provable',function(t){
   })
   t.test('state',function(t){
     var state = engine.state()
-    t.equal(state.index-1,options.count)
+    t.equal(state.index,options.count)
     t.end()
   })
   t.test('random',function(t){
@@ -78,11 +78,17 @@ test('provable',function(t){
     engine = Engine(options)
     lodash.times(100,engine)
     var state = engine.state()
-    var next = engine.peekHash()
+    var next = engine.peek()
 
     engine = Engine(state)
-    var hash = engine.nextHash()
+    var hash = engine.next()
     t.equal(hash,next)
+    t.end()
+  })
+
+  t.test('generate',function(t){
+    var series = Engine.generate(10,'test')
+    t.equal(series.length,10)
     t.end()
   })
 })

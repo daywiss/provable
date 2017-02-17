@@ -8,6 +8,25 @@ var seed = Random.generateEntropyArray()
 var engine = Random.engines.mt19937().seedWithArray(seed)
 var rand = new Random(engine)
 
+function createSeed(){
+  return rand.uuid4()
+}
+
+function sha256(seed){
+  return crypto.createHash('sha256').update(seed).digest('hex');
+}
+//generate random hash series
+function generate(count,seed){
+  seed = seed || createSeed()
+  count = count || 1
+  var result = Array(count)
+  for(var i = count-1; i >= 0; i--){
+    seed = sha256(seed)
+    result[i]= seed
+  }
+  return result
+}
+
 function Engine(options){
   function defaults(options){
     return lodash.defaults(lodash.clone(options),{
@@ -27,67 +46,51 @@ function Engine(options){
     state.onChange(state)
   }
 
-  function createSeed(){
-    return rand.uuid4()
-  }
-
-  function sha256(seed){
-    return crypto.createHash('sha256').update(seed).digest('hex');
-  }
-
-  //generate random hash series
-  function generate(count,seed){
-    seed = seed || createSeed()
-    count = count || 1
-    var result = Array(count)
-    for(var i = count-1; i >= 0; i--){
-      seed = sha256(seed)
-      result[i]= seed
-    }
-    return result
-  }
-
-  function nextHash(){
-    var hash = hashes[state.index++]
-    onChange(state)
-    assert(hash,'end of hash series')
-    if(state.clientSeed) hash = crypto.createHmac('sha256',hash).update(state.clientSeed).digest(hex)
-    return hash
-  }
-
   function int32(hash){
     return parseInt(hash.slice(-8),16)
   }
 
-  function next(){
-    return int32(nextHash())
+  function engine(){
+    return int32(engine.next())
   }
 
-  next.state = function(){
+  engine.state = function(){
     return state
   }
-  next.hashes = function(){
+
+  engine.hashes = function(){
     return hashes
   }
-  next.getHash = function(index){
-    return hashes[index]
+
+  engine.last = function(){
+    engine.peek(state.index-1)
   }
 
-  next.peekHash = function(){
-    return hashes[state.index]  
+  engine.peek = function(index){
+    if(index !== 0 && index == null) index = state.index
+    return hashes[index]  
   }
 
-  next.nextHash = nextHash
-  next.generate = generate
+  engine.next = function(){
+    var hash = hashes[state.index]
+    assert(hash,'end of hash series')
+    state.index++
+    onChange(state)
+    if(state.clientSeed) hash = crypto.createHmac('sha256',hash).update(state.clientSeed).digest(hex)
+    return hash
+  }
+
 
   function init(){
     state = defaults(options)
     hashes = generate(state.count,state.seed)
     onChange(state)
-    return next
+    return engine
   }
 
   return init()
 }
+
+Engine.generate = generate
 
 module.exports = Engine 
