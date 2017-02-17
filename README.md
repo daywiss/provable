@@ -182,9 +182,9 @@ best to provide one or generate one using Provable.createSeed().
 ##createSeed()
 Returns a random UUIDV4 string created by random-js. Use this to seed your call to Provable.generate.
 ```js
-  //results of this will be random every time
   var Provable = require('Provable')
-  var seed = Provable.seed()
+  //results of this will be random every time
+  var seed = Provable.createSeed()
   var series = Provable.generate(1000,seed)
 ```
 
