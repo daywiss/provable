@@ -109,8 +109,9 @@ to handle how to proceed when that happens. You can also peek at the next value 
 undefined, which means the next call will throw.
 
 #API
-##Provable(config)
-Create a hash series and start the stateful engine.
+##Provable(config,onChange)
+Create a hash series and start the stateful engine. Optionally provide a state change callback.
+All parameters are optional, but in practice you should provide at least a hash count to generate.
 
 ```js
   var Provable = require('provable')
@@ -123,10 +124,13 @@ Create a hash series and start the stateful engine.
     count: //the number of hashes in this series
     seed: //a string to seed nodes crypto engine to start generating the first hash (last hash of series). Withold to seed with random hash.
     clientSeed: //an additional seed value supplied, will update the hash before being returned from next()
-    onChange: //a function callback which returns the state of the engine after every change. Optionally poll state instead with engine.state()
   }
 
-  var engine = Provable(config)
+  function onChange(state){
+    //persist state change somewhere
+  }
+
+  var engine = Provable(config,onChange)
   //do stuff..
 ```
 

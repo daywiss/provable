@@ -1,6 +1,6 @@
 {
   "name": "provable",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A Provably fair random hash generator which can be plugged into [random-js](https://www.npmjs.com/package/random-js).",
   "keywords": ["random","bitcoin","provable","random generator","random engine","random-js","gambling","provably random","bustabit","hashes","hash","sha256","fair","provably fair"],
   "main": "index.js",
