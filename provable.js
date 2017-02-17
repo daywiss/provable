@@ -34,6 +34,7 @@ function Engine(options,change){
       index:0,
       count:1,
       seed:createSeed(),
+      publicSeed:null,
     })
   }
 
@@ -48,8 +49,14 @@ function Engine(options,change){
     return parseInt(hash.slice(-8),16)
   }
 
+  function rehash(hash,seed){
+    if(hash == null) return hash
+    if(seed == null) return hash
+    return crypto.createHmac('sha256',hash).update(seed).digest('hex')
+  }
+
   function engine(){
-    return int32(engine.next())
+    return int32(engine.next(state.publicSeed))
   }
 
   engine.state = function(){
@@ -60,21 +67,22 @@ function Engine(options,change){
     return hashes
   }
 
-  engine.last = function(){
-    engine.peek(state.index-1)
+  engine.last = function(publicSeed){
+    return engine.peek(state.index-1,publicSeed)
   }
 
-  engine.peek = function(index){
+  engine.peek = function(index,publicSeed){
     if(index !== 0 && index == null) index = state.index
-    return hashes[index]  
+    publicSeed = publicSeed || state.publicSeed
+    return rehash(hashes[index],publicSeed)  
   }
 
-  engine.next = function(clientSeed){
-    var hash = hashes[state.index]
+
+  engine.next = function(publicSeed){
+    var hash = engine.peek(null,publicSeed)
     assert(hash,'end of hash series')
     state.index++
     onChange(state)
-    if(clientSeed) hash = crypto.createHmac('sha256',hash).update(clientSeed).digest('hex')
     return hash
   }
 

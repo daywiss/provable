@@ -10,6 +10,7 @@ test('provable',function(t){
   var options = {
     count:100000,
     seed:'test seed',
+    publicSeed:'another seed',
   }
   t.test('init',function(t){
     engine = Engine(options)
@@ -66,6 +67,15 @@ test('provable',function(t){
     var nextHash = engine.peek()
     var scrambled = engine.next('clientseed')
     t.notEqual(nextHash,scrambled)
+    t.end()
+  })
+
+  t.test('last',function(t){
+    var next = engine.next()
+    var last = engine.last()
+    var curr = engine.peek()
+    t.equal(next,last)
+    t.notEqual(curr,last)
     t.end()
   })
 

@@ -123,7 +123,8 @@ All parameters are optional, but in practice you should provide at least a hash 
     index: // integer representing which hash in the series will be used next
     count: //the number of hashes in this series
     seed: //a string to seed nodes crypto engine to start generating the first hash (last hash of series). Withold to seed with random hash.
-    clientSeed: //an additional seed value supplied, will update the hash before being returned from next()
+    publicSeed: //an additional seed string value which can be made public, and/or chosen by your clients. 
+                //will update the hash before being returned from engine(), engine.next() or engine.peek().
   }
 
   function onChange(state){
@@ -137,6 +138,8 @@ All parameters are optional, but in practice you should provide at least a hash 
 ##engine() 
 The default function of the engine is to provide a random 32 bit integer. This allows random-js to wrap the engine
 and produce random primitives. The integer is based on sampling the least significant 32 bits of the current hash.
+If a clientSeed option is supplied on engine construction then all calls to engine() will
+be rehashed with the client seed.
 
 ```js
   //integer is random between [0, 2^32] inclusive
@@ -144,7 +147,7 @@ and produce random primitives. The integer is based on sampling the least signif
   var integer = engine()
 ```
 
-##engine.next(clientSeed)
+##engine.next()
 This gets the next raw sha256 hash in the series and increments your hash index. Will throw an error if no more hashes are found.
 If hashes run out, then generate a new engine with a new seed. Do not reuse old seeds as you will generate predictable
 hashes. The clientSeed parameter is optional. If supplied the hash will be combined with clientSeed
@@ -154,11 +157,6 @@ for more fairness. clientSeed, if provided, should be published with the hash wh
   //the next raw sha256 hash in the series. Update hash index and throws if no more hashes found.
   var hash = engine.next()
 
-  //optionally provide a client seed, completely optional, but in some cases where
-  //clients want more reassurance that the outcomes are fair, they can choose
-  //their own seed which will scramble the hashes in a way unpredictable to the 
-  //server, but still deterministically to be able to verify the series.
-  var hash = engine.next('a specific client seed')
 ```
 
 ##engine.peek(index)
@@ -174,8 +172,45 @@ series or there is no hash at that index.
 
   //return hash at index 100
   var specifiedHash = engine.peek(100)
+
 ```
 
+##engine.last()
+Returns the last hash which was used.
+```js
+  var next = engine.next()
+  var previous = engine.last()
+
+  //next === previous
+
+```
+
+##engine.hashes()
+Returns the raw hashes which get generated from the seed.
+```js
+  //array of raw sha256 hashes. ClientSeed no applied.
+  var hashes = engine.hashes()
+  
+```
+
+##engine.state()
+Returns the current internal state of the engine. Use this to persist and resume
+engine function. Does not include raw hash list, as it is regenerated on construction.
+
+```js
+  //returns state of engine
+  var state = engine.state()
+  //persist state somewhere
+  persistToDB(state.id,state)
+
+  ...
+
+  //get back old state
+  var state = getFromDB(id)
+
+  //resume from where you left off
+  var engine = Provable(state)
+```
 
 ##Provable.generate(count,seed)
 Generate a raw hash series. This is used internally by the engine but is exposed in case its useful
@@ -184,6 +219,7 @@ engine. The result is an array of hashes which should be used starting at series
 to use the hashes in the correct order, or they will be predictable. If you do not provide
 a seed, a random one will be generated for you, but you will not have access to the seed. Its
 best to provide one or generate one using Provable.createSeed().
+
 ```js
   //generate 10000 hashes and returns an array of them with the seed value of "seed"
   var series = require('Provable').generate(10000,'seed')
