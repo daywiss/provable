@@ -8,13 +8,23 @@ var seed = Random.generateEntropyArray()
 var engine = Random.engines.mt19937().seedWithArray(seed)
 var rand = new Random(engine)
 
+//generate random uuid
 function createSeed(){
   return rand.uuid4()
 }
 
+//generate sha256 hash based on seed
 function sha256(seed){
   return crypto.createHash('sha256').update(seed).digest('hex');
 }
+
+//update sha hash based on seed
+function rehash(hash,seed){
+  if(hash == null) return hash
+  if(seed == null) return hash
+  return crypto.createHmac('sha256',hash).update(seed).digest('hex')
+}
+
 //generate random hash series
 function generate(count,seed){
   seed = seed || createSeed()
@@ -47,12 +57,6 @@ function Engine(options,change){
 
   function int32(hash){
     return parseInt(hash.slice(-8),16)
-  }
-
-  function rehash(hash,seed){
-    if(hash == null) return hash
-    if(seed == null) return hash
-    return crypto.createHmac('sha256',hash).update(seed).digest('hex')
   }
 
   function engine(){
@@ -102,5 +106,6 @@ function Engine(options,change){
 
 Engine.generate = generate
 Engine.createSeed = createSeed
+Engine.rehash = rehash
 
 module.exports = Engine 
