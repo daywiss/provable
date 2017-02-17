@@ -92,5 +92,6 @@ function Engine(options){
 }
 
 Engine.generate = generate
+Engine.createSeed = createSeed
 
 module.exports = Engine 

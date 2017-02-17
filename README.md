@@ -170,13 +170,23 @@ series or there is no hash at that index.
 Generate a raw hash series. This is used internally by the engine but is exposed in case its useful
 to use directly. Consider it like a static function, does not reference the internal state of the 
 engine. The result is an array of hashes which should be used starting at series[0]. Its important
-to use the hashes in the correct order, or they will be predictable.
+to use the hashes in the correct order, or they will be predictable. If you do not provide
+a seed, a random one will be generated for you, but you will not have access to the seed. Its
+best to provide one or generate one using Provable.createSeed().
 ```js
   //generate 10000 hashes and returns an array of them with the seed value of "seed"
   var series = require('Provable').generate(10000,'seed')
 ```
 
 
+##createSeed()
+Returns a random UUIDV4 string created by random-js. Use this to seed your call to Provable.generate.
+```js
+  //results of this will be random every time
+  var Provable = require('Provable')
+  var seed = Provable.seed()
+  var series = Provable.generate(1000,seed)
+```
 
 
 

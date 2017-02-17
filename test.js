@@ -89,6 +89,8 @@ test('provable',function(t){
   t.test('generate',function(t){
     var series = Engine.generate(10,'test')
     t.equal(series.length,10)
+    series = Engine.generate(10)
+    t.equal(series.length,10)
     t.end()
   })
 })
