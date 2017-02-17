@@ -15,7 +15,7 @@ is produced the hash which produced it can also be made public. If one has acces
 the previous hash (from the previous outcome), then a SHA256 can be used on the current hash to generate the previous.
 This should hold true for all hashes in the series as they are exposed. You cannot predict the next hash, but you
 can verify the previous hash by hashing its predecessor. Any deviation from this verification result would mean that the hashes
-were tampered with  and not part of the pregenerated series. Hence you can "prove" the random outcome was fair.
+were tampered with  and not part of the pregenerated series. Hence you can "prove" the random outcomes were fair. 
 
 Bear in mind since the series is pre-generated, this means eventually you will run out of hashes to generate random outcomes
 and a new series of provably fair hashes must be created.
@@ -140,7 +140,7 @@ and produce random primitives. The integer is based on sampling the least signif
   var integer = engine()
 ```
 
-##next()
+##engine.next()
 This gets the next raw sha256 hash in the series and increments your hash index. Will throw an error if no more hashes are found.
 If hashes run out, then generate a new engine with a new seed. Do not reuse old seeds as you will generate predictable
 hashes.
@@ -150,7 +150,7 @@ hashes.
   var hash = engine.next()
 ```
 
-##peek(index)
+##engine.peek(index)
 Peek will return a hash without changing engine state. The index parameter is optional and will
 default to the current engine state index, which is essentially the next hash. If index is provided
 it will return to you the hash at that index.  Returns undefined if you have reached the end of the
@@ -166,7 +166,7 @@ series or there is no hash at that index.
 ```
 
 
-##generate(count,seed)
+##Provable.generate(count,seed)
 Generate a raw hash series. This is used internally by the engine but is exposed in case its useful
 to use directly. Consider it like a static function, does not reference the internal state of the 
 engine. The result is an array of hashes which should be used starting at series[0]. Its important
@@ -179,8 +179,8 @@ best to provide one or generate one using Provable.createSeed().
 ```
 
 
-##createSeed()
-Returns a random UUIDV4 string created by random-js. Use this to seed your call to Provable.generate.
+##Provable.createSeed()
+A static function which returns a random UUIDV4 string created by random-js. Use this to seed your call to Provable.generate.
 ```js
   var Provable = require('Provable')
   //results of this will be random every time
