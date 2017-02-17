@@ -109,8 +109,8 @@ to handle how to proceed when that happens. You can also peek at the next value 
 undefined, which means the next call will throw.
 
 #API
-##Construction
-Creating a hash series.
+##Provable(config)
+Create a hash series and start the stateful engine.
 
 ```js
   var Provable = require('provable')
