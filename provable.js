@@ -34,7 +34,6 @@ function Engine(options,change){
       index:0,
       count:1,
       seed:createSeed(),
-      clientSeed:null,
     })
   }
 
@@ -70,12 +69,12 @@ function Engine(options,change){
     return hashes[index]  
   }
 
-  engine.next = function(){
+  engine.next = function(clientSeed){
     var hash = hashes[state.index]
     assert(hash,'end of hash series')
     state.index++
     onChange(state)
-    if(state.clientSeed) hash = crypto.createHmac('sha256',hash).update(state.clientSeed).digest(hex)
+    if(clientSeed) hash = crypto.createHmac('sha256',hash).update(clientSeed).digest('hex')
     return hash
   }
 

@@ -144,14 +144,21 @@ and produce random primitives. The integer is based on sampling the least signif
   var integer = engine()
 ```
 
-##engine.next()
+##engine.next(clientSeed)
 This gets the next raw sha256 hash in the series and increments your hash index. Will throw an error if no more hashes are found.
 If hashes run out, then generate a new engine with a new seed. Do not reuse old seeds as you will generate predictable
-hashes.
+hashes. The clientSeed parameter is optional. If supplied the hash will be combined with clientSeed
+for more fairness. clientSeed, if provided, should be published with the hash when proving fairness.
 
 ```js
   //the next raw sha256 hash in the series. Update hash index and throws if no more hashes found.
   var hash = engine.next()
+
+  //optionally provide a client seed, completely optional, but in some cases where
+  //clients want more reassurance that the outcomes are fair, they can choose
+  //their own seed which will scramble the hashes in a way unpredictable to the 
+  //server, but still deterministically to be able to verify the series.
+  var hash = engine.next('a specific client seed')
 ```
 
 ##engine.peek(index)

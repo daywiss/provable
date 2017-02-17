@@ -59,6 +59,15 @@ test('provable',function(t){
     t.ok(random)
     t.end()
   })
+  t.test('next',function(t){
+    engine = Engine({count:10})
+    var hash = engine.next()
+    t.ok(hash.length)
+    var nextHash = engine.peek()
+    var scrambled = engine.next('clientseed')
+    t.notEqual(nextHash,scrambled)
+    t.end()
+  })
 
   t.test('random stats',function(t){
     var val = random.bool()
