@@ -27,14 +27,13 @@ function generate(count,seed){
   return result
 }
 
-function Engine(options){
+function Engine(options,change){
   function defaults(options){
     return lodash.defaults(lodash.clone(options),{
-      id:rand.uuid4(),
+      id:createSeed(),
       index:0,
       count:1,
       seed:createSeed(),
-      onChange:function(){},
       clientSeed:null,
     })
   }
@@ -43,7 +42,7 @@ function Engine(options){
   var hashes = null
 
   function onChange(state){
-    state.onChange(state)
+    change(state)
   }
 
   function int32(hash){
@@ -83,6 +82,9 @@ function Engine(options){
 
   function init(){
     state = defaults(options)
+    if(!lodash.isFunction(change)){
+      change = function(){}
+    }
     hashes = generate(state.count,state.seed)
     onChange(state)
     return engine

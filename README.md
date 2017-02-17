@@ -118,7 +118,7 @@ Create a hash series and start the stateful engine.
   //based on the config you supply. You can get the list with engine.hashes()
 
   var config = {
-    id: // a string representing the unique id of this hash series
+    id: // a string representing the unique id of this hash series, randomly generated if not supplied
     index: // integer representing which hash in the series will be used next
     count: //the number of hashes in this series
     seed: //a string to seed nodes crypto engine to start generating the first hash (last hash of series). Withold to seed with random hash.

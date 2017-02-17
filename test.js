@@ -9,7 +9,7 @@ test('provable',function(t){
   var random = null
   var options = {
     count:100000,
-    // seed:'test seed',
+    seed:'test seed',
   }
   t.test('init',function(t){
     engine = Engine(options)
@@ -44,8 +44,13 @@ test('provable',function(t){
     t.end()
   })
   t.test('state',function(t){
-    var state = engine.state()
+    var state = engine.state(options)
     t.equal(state.index,options.count)
+    t.equal(state.seed,options.seed)
+
+    state = Engine().state()
+    t.ok(state.seed.length)
+    t.notEqual(state.seed,options.seed)
     t.end()
   })
   t.test('random',function(t){
