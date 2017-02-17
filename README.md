@@ -138,8 +138,8 @@ All parameters are optional, but in practice you should provide at least a hash 
 ##engine() 
 The default function of the engine is to provide a random 32 bit integer. This allows random-js to wrap the engine
 and produce random primitives. The integer is based on sampling the least significant 32 bits of the current hash.
-If a clientSeed option is supplied on engine construction then all calls to engine() will
-be rehashed with the client seed.
+If a publicSeed option is supplied on engine construction then all calls to engine() will
+be rehashed with the public seed.
 
 ```js
   //integer is random between [0, 2^32] inclusive
@@ -150,8 +150,8 @@ be rehashed with the client seed.
 ##engine.next()
 This gets the next raw sha256 hash in the series and increments your hash index. Will throw an error if no more hashes are found.
 If hashes run out, then generate a new engine with a new seed. Do not reuse old seeds as you will generate predictable
-hashes. The clientSeed parameter is optional. If supplied the hash will be combined with clientSeed
-for more fairness. clientSeed, if provided, should be published with the hash when proving fairness.
+hashes. The publicSeed parameter is optional. If supplied the hash will be combined with publicSeed
+for more fairness. publicSeed, if provided, should be published with the hash when proving fairness.
 
 ```js
   //the next raw sha256 hash in the series. Update hash index and throws if no more hashes found.
@@ -188,7 +188,7 @@ Returns the last hash which was used.
 ##engine.hashes()
 Returns the raw hashes which get generated from the seed.
 ```js
-  //array of raw sha256 hashes. ClientSeed no applied.
+  //array of raw sha256 hashes. publicSeed no applied.
   var hashes = engine.hashes()
   
 ```
