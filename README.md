@@ -50,7 +50,7 @@ or generate a new series and continue.
 
   //static conversion functions, no dependency on random-js
   //these functions have no affect on internal state
-  var float = Provable.toFloat(hash,0,1,false)  //hash, min, max, true = exclude max | false = include max
+  var float = Provable.toFloat(hash,0,1,true)  //hash, min, max, true = include max | false = exclude max
   var int = Provable.toInt(hash)  //same as int32 from engine()
   var bool = Provable.toBool(hash,.5) //hash, percent true, .5 = 50%
 
