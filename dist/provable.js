@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Provable = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 module.exports = require('./provable')
 
 },{"./provable":210}],2:[function(require,module,exports){
@@ -24732,12 +24732,10 @@ function Engine(options,change){
 
   function defaultState(options){
     return defaults({},options,{
-      id:utils.seed(),
-      // id:utils.createSeed(random),  //unique id for this hash series
+      id:utils.createSeed(),  //unique id for this hash series
       index:0,                      //point in hash we are at
       count:1,                      //number of hashes in series
-      seed:utils.seed(),
-      // seed:utils.createSeed(random),      //starting seed
+      seed:utils.createSeed(),      //starting seed
       publicSeed:null,              //additional client side for extra security
       maxHex:8,  //max characters to slice from hash to generate integer
     })
@@ -24814,15 +24812,15 @@ module.exports = Engine
 },{"./utils":211,"assert":16,"crypto":57,"lodash/defaults":142,"lodash/isFunction":149}],211:[function(require,module,exports){
 var assert = require('assert')
 
-exports.createSeed = function(rand){
-  assert(rand,'requires rand')
-  return rand.uuid4()
-}
+// exports.createSeed = function(rand){
+//   assert(rand,'requires rand')
+//   return rand.uuid4()
+// }
 
-exports.seed = function(len){
+exports.createSeed = function(len,possible){
     var text = "";
-    len = len || 24
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghipqrstuvwxyz0123456789";
+    len = len || 32
+    possible = possible || "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghipqrstuvwxyz0123456789";
 
     for (var i = 0; i < len; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -24886,4 +24884,5 @@ exports.generate = function(crypto,count, seed){
   return result
 }
 
-},{"assert":16}]},{},[1]);
+},{"assert":16}]},{},[1])(1)
+});

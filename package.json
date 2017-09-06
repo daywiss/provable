@@ -1,6 +1,6 @@
 {
   "name": "provable",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A Provably fair random hash generator which can be plugged into [random-js](https://www.npmjs.com/package/random-js).",
   "keywords": [
     "random",
@@ -21,9 +21,9 @@
   "main": "index.js",
   "scripts": {
     "test": "node test",
-    "bundle": "npm run build && npm run build-min",
-    "build": "browserify index.js -o dist/provable.js",
-    "build-min": "browserify -g uglifyify ./index.js -o dist/provable.min.js"
+    "build": "npm run bundle && npm run bundle-min",
+    "bundle": "browserify index.js -s Provable -o dist/provable.js",
+    "bundle-min": "browserify -g uglifyify ./index.js -s Provable -o dist/provable.min.js"
   },
   "repository": {
     "type": "git",
