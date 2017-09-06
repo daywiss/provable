@@ -57,7 +57,7 @@ exports.toFloat = function(hash,min,max,exclusive){
 
 exports.toBool = function(hash,percent){
   if(percent == null) percent = .5
-  var num = toFloat(hash)
+  var num = toFloat(hash,0,1,true)
   return num < percent
 }
 
