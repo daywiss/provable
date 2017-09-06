@@ -24797,10 +24797,10 @@ function Engine(options,change){
 }
 
 //add helper static functions
-Engine.generate = utils.generate
-Engine.createSeed = utils.createSeed
-Engine.rehash = utils.rehash
-Engine.sha256 = utils.sha256
+Engine.generate = utils.generate.bind(null,crypto)
+Engine.createSeed = utils.createSeed.bind(null,crypto)
+Engine.rehash = utils.rehash.bind(null,crypto)
+Engine.sha256 = utils.sha256.bind(null,crypto)
 
 //some basic hash parsing
 Engine.toInt = utils.toInt
@@ -24869,7 +24869,7 @@ exports.toFloat = function(hash,min,max,exclusive){
 
 exports.toBool = function(hash,percent){
   if(percent == null) percent = .5
-  var num = toFloat(hash)
+  var num = toFloat(hash,0,1,true)
   return num < percent
 }
 

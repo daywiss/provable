@@ -216,11 +216,41 @@ Returns the last hash which was used.
 
 ```
 
-## engine.hashes()
-Returns the raw hashes which get generated from the seed.
+## engine.hashes(start=(0), end=(hashes.length), includeSeed=(false), reverse=(false))
+Returns the raw hashes which get generated from the seed. Include start and end indices
+which will be sliced from the hash list. By default it will return the whole list.
+
+IncludeSeed variable will include original seed of the entire hash chain at the end of the hash
+list only if end == null or undefined. 
+
+Reverse variable will reverse the hash list after all queries have been applied. Use this
+when verifying your series on a third party site. The hash you are verifying is the seed at index 0,
+and all hashes after that are previous outcomes that have been played. 
+
 ```js
-  //array of raw sha256 hashes. publicSeed no applied.
+  //array of raw sha256 hashes. publicSeed not applied.
   var hashes = engine.hashes()
+
+  //returns
+  var hashes = engine.hashes(0,10)
+
+
+  //"Proving" hashes
+  var provable = Provable({
+    seed:'hash to verify',
+    count:10, //number of previous hashes to show
+  })
+  
+  //returns 11 hashes, the seed hash + 10 previous outcomes
+  var hashes = provable.hashes(null,null,true,true)
+
+  //if you had a public seed you will have to hash against it manually
+  hashes = hashes.map(function(hash,i){
+    //ignore seed hash
+    if(i == 0) return hash
+    return Provable.rehash(hash,publicSeed)
+  })
+
   
 ```
 
@@ -243,34 +273,31 @@ engine function. Does not include raw hash list, as it is regenerated on constru
   var engine = Provable(state)
 ```
 
-## ** Static Functions **
+## Static Functions 
 
-## Provable.toInt(hash)
+### Provable.toInt(hash)
 Returns a 32 bit integer based on any hash.
 
-## Provable.toFloat(hash, min=(0), max=(1), exclusive=(false))
+### Provable.toFloat(hash, min=(0), max=(1), exclusive=(false))
 Returns a float between min and max. You can exlude the max number by passing true to exclusive.
 
 
-## Provable.toBool(hash, percent(.5))
+### Provable.toBool(hash, percent(.5))
 Returns a boolean value. The percent true can be adjusted through the percent parameter.
 
-## Provable.generate(Crypto(required),count=(1),seed(required))
+### Provable.generate(count=(1),seed(required))
 Generate a raw hash series. This is used internally by the engine but is exposed in case its useful
 to use directly. Consider it like a static function, does not reference the internal state of the 
 engine. The result is an array of hashes which should be used starting at series[0]. Its important
 to use the hashes in the correct order, or they will be predictable.
 
-The first parameter (Crypto) can be either crypto-js or nodes crypto module. This will be used
-to generate SHA hashes. The seed value can be any string. 
-
 ```js
   //generate 10000 hashes and returns an array of them with the seed value of "seed"
-  var series = require('provable').generate(require('crypto-js'),10000,'seed')
+  var series = require('provable').generate(10000,'seed')
 ```
 
 
-## Provable.createSeed()
+### Provable.createSeed()
 A static function which returns a random string created by Math.random. Use this to seed your call to Provable.generate.
 ```js
   var Provable = require('provable')
@@ -279,6 +306,23 @@ A static function which returns a random string created by Math.random. Use this
   var series = Provable.generate(1000,seed)
 ```
 
+### Provable.rehash(firstHash,combineWith)
+Combines hash with another hash through HMAC.
+
+```js
+  var Provable = require('provable')
+  var updatedhash = Provable.rehash(hash,publicSeed)
+   
+```
+
+### Provable.sha256(seed)
+Hashes seed using sha256.
+
+```js
+  var Provable = require('provable')
+  var hash = Provable.sha256(seed)
+   
+```
 
 
 

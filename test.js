@@ -30,6 +30,11 @@ test('provable',function(t){
     t.equal(hashes.length,options.count)
     t.end()
   })
+  t.test('hashes slice',function(t){
+    var hashes = engine.hashes(0,10)
+    t.equal(hashes.length,10)
+    t.end()
+  })
   t.test('stats',function(t){
     var stats = {count:0,min:Math.pow(2,32),max:0,hist:{}}
     var val = engine()
@@ -120,10 +125,25 @@ test('provable',function(t){
   })
 
   t.test('generate',function(t){
-    var series = Engine.generate(crypto,10,'test')
+    var series = Engine.generate(10,'test')
     t.equal(series.length,10)
-    series = Engine.generate(crypto,10,'seed')
+    series = Engine.generate(10,'seed')
     t.equal(series.length,10)
     t.end()
   })
+
+  t.test('proving stuff',function(t){
+    var hash = 'bea3d13023a3f99f16553c6bc9e02f78b09de773d2d226b93afffe16022be98f'
+    var provable = Engine({
+      seed:hash,
+      count:10,
+    })
+    var hashes = provable.hashes(null,null,true,true)
+    var original = lodash.clone(provable.hashes())
+    t.deepEqual(original,hashes.slice(1).reverse())
+    t.equal(hashes[0],hash)
+    t.deepEqual(original,provable.hashes())
+    t.end()
+  })
+
 })

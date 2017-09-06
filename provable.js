@@ -2,6 +2,7 @@ var crypto = require('crypto');
 var assert = require('assert')
 var defaults = require('lodash/defaults')
 var isFunction = require('lodash/isFunction')
+var clone = require('lodash/clone')
 var utils = require('./utils')
 
 function Engine(options,change){
@@ -33,8 +34,27 @@ function Engine(options,change){
     return state
   }
 
-  engine.hashes = function(){
-    return hashes
+  //query hash array
+  engine.hashes = function(start,end,includeSeed,reverse){
+    start = start || 0
+    if(includeSeed){
+      end = end || state.count + 1
+    }else{
+      end = end || state.count
+    }
+    var list = hashes
+
+    if(includeSeed){
+      list = hashes.concat([state.seed])
+    }
+
+    list = list.slice(start,end)
+
+    if(reverse){
+      return list.reverse()
+    }else{
+      return list
+    }
   }
 
   engine.last = function(publicSeed){
@@ -73,10 +93,10 @@ function Engine(options,change){
 }
 
 //add helper static functions
-Engine.generate = utils.generate
-Engine.createSeed = utils.createSeed
-Engine.rehash = utils.rehash
-Engine.sha256 = utils.sha256
+Engine.generate = utils.generate.bind(null,crypto)
+Engine.createSeed = utils.createSeed.bind(null,crypto)
+Engine.rehash = utils.rehash.bind(null,crypto)
+Engine.sha256 = utils.sha256.bind(null,crypto)
 
 //some basic hash parsing
 Engine.toInt = utils.toInt
