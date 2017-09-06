@@ -1,7 +1,15 @@
 var test = require('tape')
 var Random = require('random-js')
 var Engine = require('./')
+var utils = require('./utils')
 var lodash = require('lodash')
+// var crypto = require('crypto-js')
+var crypto = require('crypto')
+
+//create random
+// var seed = Random.generateEntropyArray()
+// var engine = Random.engines.mt19937().seedWithArray(seed)
+// var rand = new Random(engine)
 
 
 test('provable',function(t){
@@ -33,6 +41,7 @@ test('provable',function(t){
       // stats.hist[val]++
       try{
         val = engine()
+        // console.log(val)
       }catch(e){
         val = null
       }
@@ -111,9 +120,9 @@ test('provable',function(t){
   })
 
   t.test('generate',function(t){
-    var series = Engine.generate(10,'test')
+    var series = Engine.generate(crypto,10,'test')
     t.equal(series.length,10)
-    series = Engine.generate(10)
+    series = Engine.generate(crypto,10,'seed')
     t.equal(series.length,10)
     t.end()
   })

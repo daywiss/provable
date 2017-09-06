@@ -1,50 +1,19 @@
-var Random = require('random-js')
 var crypto = require('crypto');
 var assert = require('assert')
-var lodash = require('lodash')
-
-//create random
-var seed = Random.generateEntropyArray()
-var engine = Random.engines.mt19937().seedWithArray(seed)
-var rand = new Random(engine)
-
-//generate random uuid
-function createSeed(){
-  return rand.uuid4()
-}
-
-//generate sha256 hash based on seed
-function sha256(seed){
-  return crypto.createHash('sha256').update(seed).digest('hex');
-}
-
-//update sha hash based on seed
-function rehash(hash,seed){
-  if(hash == null) return hash
-  if(seed == null) return hash
-  return crypto.createHmac('sha256',hash).update(seed).digest('hex')
-}
-
-//generate random hash series
-function generate(count,seed){
-  seed = seed || createSeed()
-  count = count || 1
-  var result = Array(count)
-  for(var i = count-1; i >= 0; i--){
-    seed = sha256(seed)
-    result[i]= seed
-  }
-  return result
-}
+var defaults = require('lodash/defaults')
+var isFunction = require('lodash/isFunction')
+var utils = require('./utils')
 
 function Engine(options,change){
-  function defaults(options){
-    return lodash.defaults(lodash.clone(options),{
-      id:createSeed(),
-      index:0,
-      count:1,
-      seed:createSeed(),
-      publicSeed:null,
+
+  function defaultState(options){
+    return defaults({},options,{
+      id:utils.createSeed(),  //unique id for this hash series
+      index:0,                      //point in hash we are at
+      count:1,                      //number of hashes in series
+      seed:utils.createSeed(),      //starting seed
+      publicSeed:null,              //additional client side for extra security
+      maxHex:8,  //max characters to slice from hash to generate integer
     })
   }
 
@@ -55,12 +24,9 @@ function Engine(options,change){
     change(state)
   }
 
-  function int32(hash){
-    return parseInt(hash.slice(-8),16)
-  }
-
+  //random js calls this
   function engine(){
-    return int32(engine.next(state.publicSeed))
+    return utils.toInt(engine.next(state.publicSeed),state.maxHex)
   }
 
   engine.state = function(){
@@ -78,7 +44,7 @@ function Engine(options,change){
   engine.peek = function(index,publicSeed){
     if(index !== 0 && index == null) index = state.index
     publicSeed = publicSeed || state.publicSeed
-    return rehash(hashes[index],publicSeed)  
+    return utils.rehash(crypto,hashes[index],publicSeed)  
   }
 
 
@@ -90,13 +56,15 @@ function Engine(options,change){
     return hash
   }
 
-
   function init(){
-    state = defaults(options)
-    if(!lodash.isFunction(change)){
+    state = defaultState(options)
+    state.maxInt = Math.pow(2,state.maxHex * 4) //maximum sized integer we can get from single hash
+    assert(state.seed,'requires seed value')
+
+    if(!isFunction(change)){
       change = function(){}
     }
-    hashes = generate(state.count,state.seed)
+    hashes = utils.generate(crypto,state.count,state.seed)
     onChange(state)
     return engine
   }
@@ -104,8 +72,15 @@ function Engine(options,change){
   return init()
 }
 
-Engine.generate = generate
-Engine.createSeed = createSeed
-Engine.rehash = rehash
+//add helper static functions
+Engine.generate = utils.generate
+Engine.createSeed = utils.createSeed
+Engine.rehash = utils.rehash
+Engine.sha256 = utils.sha256
+
+//some basic hash parsing
+Engine.toInt = utils.toInt
+Engine.toFloat = utils.toFloat
+Engine.toBool = utils.toBool
 
 module.exports = Engine 

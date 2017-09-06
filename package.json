@@ -2,10 +2,28 @@
   "name": "provable",
   "version": "0.2.1",
   "description": "A Provably fair random hash generator which can be plugged into [random-js](https://www.npmjs.com/package/random-js).",
-  "keywords": ["random","bitcoin","provable","random generator","random engine","random-js","gambling","provably random","bustabit","hashes","hash","sha256","fair","provably fair"],
+  "keywords": [
+    "random",
+    "bitcoin",
+    "provable",
+    "random generator",
+    "random engine",
+    "random-js",
+    "gambling",
+    "provably random",
+    "bustabit",
+    "hashes",
+    "hash",
+    "sha256",
+    "fair",
+    "provably fair"
+  ],
   "main": "index.js",
   "scripts": {
-    "test": "node test"
+    "test": "node test",
+    "bundle": "npm run build && npm run build-min",
+    "build": "browserify index.js -o dist/provable.js",
+    "build-min": "browserify -g uglifyify ./index.js -o dist/provable.min.js"
   },
   "repository": {
     "type": "git",
@@ -18,10 +36,13 @@
   },
   "homepage": "https://github.com/daywiss/provable#readme",
   "devDependencies": {
-    "tape": "^4.6.3"
+    "browserify": "^14.4.0",
+    "tape": "^4.6.3",
+    "uglifyify": "^4.0.3",
+    "random-js": "^1.0.8",
+    "crypto-js": "^3.1.9-1"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
-    "random-js": "^1.0.8"
+    "lodash": "^4.17.4"
   }
 }
