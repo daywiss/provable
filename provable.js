@@ -2,7 +2,6 @@ var crypto = require('crypto');
 var assert = require('assert')
 var defaults = require('lodash/defaults')
 var isFunction = require('lodash/isFunction')
-var clone = require('lodash/clone')
 var utils = require('./utils')
 
 function Engine(options,change){

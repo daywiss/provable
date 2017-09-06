@@ -60,7 +60,7 @@ exports.toInt = function(hash,maxHex,mostSig){
   }
 }
 
-exports.toFloat = function(hash,min,max,exclusive,maxHex,mostSig){
+exports.toFloat = function(hash,min,max,inclusive,maxHex,mostSig){
   assert(hash,'requires hash')
   if(min == null) min = 0
   if(max == null) max = 1
@@ -68,14 +68,14 @@ exports.toFloat = function(hash,min,max,exclusive,maxHex,mostSig){
   var maxInt = calcMaxInt(maxHex)
   var integer = exports.toInt(hash, maxHex, mostSig)
   var scale = max - min
-  var limit = exclusive ? maxInt + 1 : maxInt
+  var limit = inclusive ? maxInt - 1 : maxInt
 
   return min + scale * (integer/limit)
 }
 
 exports.toBool = function(hash,percent,maxHex,mostSig){
   if(percent == null) percent = .5
-  var num = exports.toFloat(hash,0,1,true,maxHex,mostSig)
+  var num = exports.toFloat(hash,0,1,false,maxHex,mostSig)
   return num < percent
 }
 

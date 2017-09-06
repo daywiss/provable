@@ -65,16 +65,37 @@ or generate a new series and continue.
 
 # Random-JS
 [Random-js](https://www.npmjs.com/package/random-js) can give you more options over the types of 
-random values you can generate. Keep in mind that random-js only uses 32 bits of the hash, 
-the rest is discarded. This provable engine defaults to using the 32 least significant bits of 
+random values you can generate. Keep in mind that random-js only uses 32 bits of the hash and
+2 hashes in order to generate 1 outcome. This is important when developing your third party verification.
+This provable engine defaults to using the 32 least significant bits of 
 the hash when generating the random integer.
+
+If you dont want to use random-js there are static functions included with the library
+which will generate ints, bools and floats from a hash.
 
 ```js
   var Random = require('random-js')
   var Provable = require('provable')
 
+  //initizlize engine with 10k hashes
+  var engine = Provable({ count:10000 }
+
+  //we make a never ending hashing function to feed into random js
+  //the provable engine will throw an error when the end of a hash series 
+  //is reached
+  function next(){
+    try{
+      return engine()
+    //only throws when hashes run out
+    catch(e){
+      //create new series
+      engine = Provable({ count:10000 }
+      return next()
+    }
+  }
+  
   //use random like a random-js object
-  var random = Random(Provable({ count:10000 })
+  var random = Random(engine)
 
   //some examples
   random.bool()
@@ -82,9 +103,8 @@ the hash when generating the random integer.
   random.real(min,max,inclusive)
   //etc...
 
-  //keep in mind, the provable engine will throw when out of values,
-  //so you should wrap each call in try catch. When the engine throws,
-  //you should start a new series.
+  //keep in mind random js uses 2 hashes per outcome. You will need to also use
+  //random-js on your third party verification site
 
 ```
 
@@ -171,7 +191,7 @@ If a publicSeed option is supplied on engine construction then all calls to engi
 be rehashed with the public seed.
 
 ```js
-  //integer is random between [0, 2^32] inclusive
+  //integer is random between [0, 2^32) exclusive
   //this increments your hash index and will call the change callback
   var integer = engine()
 ```
@@ -278,8 +298,8 @@ Returns an integer based on any hash. Max hex is the number of characters sliced
 the hash to determine your integer and bit count. It defaults to 8 characters which is a 32 bit int.
 MostSig allows you to take your int from the front(mostSig=true) or back of the hash(mostSig=false).
 
-### Provable.toFloat(hash, min=(0), max=(1), exclusive=(false), maxHex=(8), mostSig=(false))
-Returns a float between min and max. You can exlude the max number by passing true to exclusive.
+### Provable.toFloat(hash, min=(0), max=(1), inclusive=(false), maxHex=(8), mostSig=(false))
+Returns a float between min and max. You can include the max number by passing true to inclusive.
 
 
 ### Provable.toBool(hash, percent(.5), maxHex=(8), mostSig=(false))
