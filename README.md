@@ -63,8 +63,6 @@ or generate a new series and continue.
 
 ```
 
-
-
 # Random-JS
 [Random-js](https://www.npmjs.com/package/random-js) can give you more options over the types of 
 random values you can generate. Keep in mind that random-js only uses 32 bits of the hash, 
@@ -275,15 +273,17 @@ engine function. Does not include raw hash list, as it is regenerated on constru
 
 ## Static Functions 
 
-### Provable.toInt(hash)
-Returns a 32 bit integer based on any hash.
+### Provable.toInt(hash, maxHex=(8), mostSig=(false))
+Returns an integer based on any hash. Max hex is the number of characters sliced from
+the hash to determine your integer and bit count. It defaults to 8 characters which is a 32 bit int.
+MostSig allows you to take your int from the front(mostSig=true) or back of the hash(mostSig=false).
 
-### Provable.toFloat(hash, min=(0), max=(1), exclusive=(false))
+### Provable.toFloat(hash, min=(0), max=(1), exclusive=(false), maxHex=(8), mostSig=(false))
 Returns a float between min and max. You can exlude the max number by passing true to exclusive.
 
 
-### Provable.toBool(hash, percent(.5))
-Returns a boolean value. The percent true can be adjusted through the percent parameter.
+### Provable.toBool(hash, percent(.5), maxHex=(8), mostSig=(false))
+Returns a boolean value. The percent true can be adjusted through the percent parameter, defaults to 50%.
 
 ### Provable.generate(count=(1),seed(required))
 Generate a raw hash series. This is used internally by the engine but is exposed in case its useful
