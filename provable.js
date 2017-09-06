@@ -84,6 +84,7 @@ function Engine(options,change){
     if(!isFunction(change)){
       change = function(){}
     }
+
     hashes = utils.generate(crypto,state.count,state.seed)
     onChange(state)
     return engine

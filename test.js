@@ -146,4 +146,12 @@ test('provable',function(t){
     t.end()
   })
 
+  t.test('rands',function(t){
+    var hash = 'bea3d13023a3f99f16553c6bc9e02f78b09de773d2d226b93afffe16022be98f'
+    t.ok(Engine.toFloat(hash))
+    t.ok(Engine.toInt(hash))
+    t.ok(Engine.toBool(hash))
+    t.end()
+  })
+
 })

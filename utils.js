@@ -37,27 +37,38 @@ exports.rehash = function(crypto,hash,seed){
   }
 }
 
+var defaultHex = 8
+var defaultMaxInt = Math.pow(2,8*4)
 //reads maxHex characters from end of hash ( least significant bits)
 exports.toInt = function(hash,maxHex){
   assert(hash,'requires hash')
-  maxHex = maxHex || 8
+  maxHex = maxHex || defaultHex
   assert(hash.length >= maxHex,'hash is not long enough')
   return parseInt(hash.slice(-maxHex),16)
 }
 
-exports.toFloat = function(hash,min,max,exclusive){
+function calcMaxInt(maxHex){
+  maxHex = maxHex || defaultHex
+  if(maxHex == defaultHex) return defaultMaxInt 
+  return Math.pow(2,maxHex*4)
+}
+
+exports.toFloat = function(hash,min,max,exclusive,maxHex){
   assert(hash,'requires hash')
   if(min == null) min = 0
   if(max == null) max = 1
-  var integer = toInt(hash)
+
+  var maxInt = calcMaxInt(maxHex)
+  var integer = exports.toInt(hash, maxHex)
   var scale = max - min
   var limit = exclusive ? maxInt + 1 : maxInt
+
   return min + scale * (integer/limit)
 }
 
 exports.toBool = function(hash,percent){
   if(percent == null) percent = .5
-  var num = toFloat(hash,0,1,true)
+  var num = exports.toFloat(hash,0,1,true)
   return num < percent
 }
 
