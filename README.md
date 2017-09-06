@@ -255,22 +255,23 @@ Returns a float between min and max. You can exlude the max number by passing tr
 ## Provable.toBool(hash, percent(.5))
 Returns a boolean value. The percent true can be adjusted through the percent parameter.
 
-## Provable.generate(count,seed)
+## Provable.generate(Crypto(required),count=(1),seed(required))
 Generate a raw hash series. This is used internally by the engine but is exposed in case its useful
 to use directly. Consider it like a static function, does not reference the internal state of the 
 engine. The result is an array of hashes which should be used starting at series[0]. Its important
-to use the hashes in the correct order, or they will be predictable. If you do not provide
-a seed, a random one will be generated for you, but you will not have access to the seed. Its
-best to provide one or generate one using Provable.createSeed().
+to use the hashes in the correct order, or they will be predictable.
+
+The first parameter (Crypto) can be either crypto-js or nodes crypto module. This will be used
+to generate SHA hashes. The seed value can be any string. 
 
 ```js
   //generate 10000 hashes and returns an array of them with the seed value of "seed"
-  var series = require('provable').generate(10000,'seed')
+  var series = require('provable').generate(require('crypto-js'),10000,'seed')
 ```
 
 
 ## Provable.createSeed()
-A static function which returns a random UUIDV4 string created by random-js. Use this to seed your call to Provable.generate.
+A static function which returns a random string created by Math.random. Use this to seed your call to Provable.generate.
 ```js
   var Provable = require('provable')
   //results of this will be random every time
