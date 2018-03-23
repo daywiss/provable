@@ -53,7 +53,7 @@ exports.toInt = function(hash,maxHex,mostSig){
   assert(hash.length >= maxHex,'hash is not long enough')
   if(mostSig){
     //most signifiacate part of hash is used
-    return parseInt(hash.slice(maxHex),16)
+    return parseInt(hash.slice(0,maxHex),16)
   }else{
     //lease significant part of hash is used
     return parseInt(hash.slice(-maxHex),16)

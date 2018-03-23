@@ -1,6 +1,6 @@
 {
   "name": "provable",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A Provably fair random hash generator which can be plugged into [random-js](https://www.npmjs.com/package/random-js).",
   "keywords": [
     "random",

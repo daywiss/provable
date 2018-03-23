@@ -116,19 +116,17 @@ of provable comes bundled with pre built js which you can include on a page. You
 should not include them in your production site because minified file is over 300k.
 
 ## Using from third party client in browser
-```
-  This library comes bundled with the full version and a minified version of the library, which can be
-  included with a script tag in your html:
+This library comes bundled with the full version and a minified version of the library, which can be
+included with a script tag in your html:
 
-  ```https://cdn.rawgit.com/daywiss/provable/master/dist/provable.js```     674k 
-  ```https://cdn.rawgit.com/daywiss/provable/master/dist/provable.min.js``` 383k
+674k `https://cdn.rawgit.com/daywiss/provable/master/dist/provable.js`
+383k `https://cdn.rawgit.com/daywiss/provable/master/dist/provable.min.js`
 
-  You should not include these files in your production site, as even minified the file is over 300k.
+You should not include these files in your production site, as even minified the file is over 300k.
 
-  Instead include them in your js-bin or other third party link for verifying your provable outcomes.
+Instead include them in your js-bin or other third party link for verifying your provable outcomes.
 
-  `Provable` will be added to your global namespace which will have the same api as the node module.      
-```
+`Provable` will be added to your global namespace which will have the same api as the node module.      
 
 ##  Example Third party proof
 Simple jsbin example program has been created to show how to use provable to verify your hashes
