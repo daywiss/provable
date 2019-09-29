@@ -120,6 +120,7 @@ This library comes bundled with the full version and a minified version of the l
 included with a script tag in your html:
 
 674k `https://cdn.rawgit.com/daywiss/provable/master/dist/provable.js`
+
 383k `https://cdn.rawgit.com/daywiss/provable/master/dist/provable.min.js`
 
 You should not include these files in your production site, as even minified the file is over 300k.
