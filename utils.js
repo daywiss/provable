@@ -7,8 +7,8 @@ var assert = require('assert')
 
 exports.createSeed = function(len,possible){
     var text = "";
-    len = len || 32
-    possible = possible || "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghipqrstuvwxyz0123456789";
+    len = len || 256
+    possible = possible || " -_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghipqrstuvwxyz0123456789";
 
     for (var i = 0; i < len; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length));
